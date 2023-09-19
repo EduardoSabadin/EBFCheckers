@@ -1,1 +1,1 @@
-# EBFCheckers
+# ebf-checkers

@@ -1,0 +1,75 @@
+Rules
+=====
+
+Goal
+-----
+Checkers is a board game played between two players who alternate moves. A player wins when his opponent cannot make a move. If the game takes more than a certain number of turns, it will be declared a draw.
+
+Board Setup
+-----------
+The board is a 8x8 grid with sixty-four smaller squares. The smaller squares are alternately light and dark, colored green and buff, in the famous "checker-board" pattern. The game of checkers is played only on the dark squares. Each player has a dark square on his far left and a light square on his far right. The double-corner is the distinctive pair of dark squares in the near right corner. Each player starts with twelve pieces on the twelve dark squares closest to his edge of the board.
+
+Moving
+------
+The player on the bottom moves first, then the players take turns moving. You must move and you can make only one move per turn. If you cannot move, you lose. A piece which is not a king can move one square, diagonally, forward. A king can move one square diagonally, forward or backward. A piece can only move to a vacant square. A move can also consist of one or more jumps.
+
+Jumping
+-------
+You capture an opponent's piece by jumping over it, diagonally, to the adjacent vacant square beyond it. The three squares must be lined up (diagonally adjacent): your jumping piece, opponent's piece, empty square. A king can jump diagonally, forward or backward. A piece which is not a king, can only jump diagonally forward. You can make a multiple jump with one piece only, by jumping from empty square to empty square. In a multiple jump, the jumping piece or king can change directions, jumping first in one direction and then in another direction. You can only jump one piece with any given jump, but you can jump several pieces with a move of several jumps. You remove the jumped pieces from the board. You cannot jump your own piece. You cannot jump the same piece twice. If you can jump, you must take the jump. And, a multiple jump must be completed; you cannot stop part way through a multiple jump. If you have a choice of jumps, you can choose among them, regardless of whether they are multiple, or not.
+
+Kinging
+-------
+When a piece reaches the last row (the King Row), it becomes a King. A piece that was just kinged, cannot continue jumping pieces until the next move.
+
+
+
+
+GUI
+===
+
+Menu Items
+----------
+> New Game: Begins a new Checkers game.
+
+> Pause: Pauses and resumes the game. AI's will have their turn time reset if they have not already taken their turn.
+
+> Quit: Quits the game.
+
+> Player Setup: Opens the Player Setup dialog, which allows the user to select the player for each side of the board.
+
+> Game Options: Opens the Game Options Dialog, which allows the user to change the player turn time, max moves, pause time, and tile size of the squares of the Checkers board. It also allows the user to toggle automatic player side switching and to choose whether the GUI should highlight all possible moves with the color scheme specified below in the "Tile Colors" section.
+
+
+Tools
+-----
+> Trainer: A GUI interface that allows the user to train a CheckersPlater by having it play a selection of other CheckersPlayers. The Trainer also keeps track of game outcomes. The Trainer is meant for Learning AI's, but it can also be used just to see how an AI competes with the other AI's.
+
+
+Fields
+------
+> Turns: A list of all turns that have been taken in the current game and the name of the Checkers Player that took that turn. The "Board Display" will display the board, players, and player scores of the selected turn.
+
+> Board Display: Displays the selected turn in "Turns". If the current player is a human, the player can take his turn by dragging one of the player's pieces to the location the player wants to move it too.
+
+> Player Labels: Shows the name of the player on that side of the board and the player's pawn count and king count.
+
+> Moves: The current move count. When this reaches the specified max moves, the game will be declared a draw.
+
+> Turn Time Left: Displays the remaining time for the current player to take his turn. The text will be in the color of the current player that is moving.
+
+> Game Time: The total time that has elapsed since the beginning of the game.
+
+> Min Move Time: The minimum amount of time that the GUI will pause between turns.
+
+
+Tile Colors
+-----------
+Note: This is the color scheme used to designate possible moves for the current player. It can be enabled or disabled in the Game Options Dialog.
+
+> Green: When no piece is held, it denotes squares that have a checker that can move. When a piece is held, it denotes the start and end squares of possible moves.
+
+> Cyan: When a piece is held, it denotes squares in the intermediate steps of a jump-chain that consists of 3 or more jumps.
+
+> Blue: It denotes the start and end squares of the last move made.
+
+> Magenta: It denotes squares in the intermediate steps of a jump-chain that consists of 3 or more jumps.

@@ -1,0 +1,470 @@
+Change Log v1.26
+################
+
+CheckersGUI
+===========
+
+General
+-------
+- Fixed a bug with the 'newGame' menu item being disabled.
+
+
+
+CheckersGameManager
+===================
+
+General
+-------
+- Fixed a bug with an incorrect method being called when notifying listeners of a player1 state change.
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.25
+################
+
+CheckersNeuralNetwork
+=====================
+
+General
+-------
+- Structure of neural network redesigned for a general feed-forward neural network.
+- Renamed to "FeedForwardNN"
+- General topography structures for a neural network created.
+- "public String toString()" returns a more descriptive string that should be unique for each neural network topography.
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.24
+################
+
+CheckersGUI
+===========
+
+General
+-------
+- Fixed a bug where the keyboard shortcut was not working for the "About" menu item.
+- "About" menu item has been changed to include contact information, and license information.
+- NEW: "GNU General Public License" menu item, that displays the full terms and conditions.
+
+
+
+CheckersGameManager
+===================
+
+General
+-------
+- Fixed a bug where the PlayerPlyThread was not stopped when a new game was started.
+- Fixed a bug, that cause the thread to wait 1 second before pausing. 
+
+
+
+CheckersPlayerEvent
+===================
+
+General
+-------
+- Added "public final int maxMoves". So the CheckersPlayer can know how many more moves there are before the game is declared a draw. Note: A move consists of a Player1 ply and a Player2 ply.
+
+
+
+CheckersTrainer
+===============
+
+General
+-------
+- The user can now only clear the data if there is 1+ entries.
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.23
+################
+
+CheckersGUI
+===========
+
+General
+-------
+- When the window is quit, if the CheckersTrainer is open, it will unpause the CheckersGameManager.
+
+
+
+CheckersTrainer
+===============
+
+General
+-------
+- Drag and drop problems have been fixed.
+- Graph now graphs the data for each player in group1. The user selects which to player to graph from a list. 
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.22
+################
+
+General
+-------
+- Fixed a small bug.
+
+
+
+CheckersGUI
+===========
+
+General
+-------
+- When key shortcuts are used, only the initial press is detected.
+
+
+
+CheckersTrainer
+===============
+
+General
+-------
+- Has been changed to have two groups of players that will play against each other.
+- Each table now has its own separate buttons for modifying the contents.
+- Dragging and the graph still has some problems.
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.21
+################
+
+General
+-------
+- Project has been renamed to "EBFCheckers".
+
+
+
+DefaultCheckersBoard
+====================
+
+Methods
+-------
+- Fixed a bug with the "findSuccessors(byte, byte, ArrayList<DefaultCheckersBoard>, boolean)" method that would forget to promote pawns to kings.
+
+
+
+CheckersGUI
+===========
+
+General
+-------
+- The CheckersGUI no longer displays "Press 'n' to start a New Game" when a game is finished.
+
+
+CheckersTrainer
+===============
+
+General
+-------
+- Fixed a bug that allowed the user to modify the wins, draws, and losses of the trainee.
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.20
+################
+
+General
+-------
+- Java documentation has been filled out.
+
+
+
+CheckersPlayerInterface
+=======================
+
+General
+-------
+- NEW: CheckersPlayerEvent class has been added as an inner class to the CheckersPlayerInterface. It takes a CheckersGameManager as a parameter, and will store the current variables that a CheckersPlayerInterface might need, without allowing access to the actual GameManager.
+
+Methods
+-------
+- CHANGE: All notification methods have been changed to only take a CheckersPlayerEvent as a parameter.
+- CHANGE: "public void notifyGameStart()" has been changed to "public void gameStarted(CheckersPlayerEvent)".
+- CHANGE: "public void notifyGameEnd(int)" has been changed to "public void gameEnded(CheckersPlayerEvent)".
+- CHANGE: "public void notifyRemainingTime(long remainingTime)" has been changed to "public void remainingTimeChanged(CheckersPlayerEvent)".
+- CHANGE: "public void takeTurn(CheckersBoard, int, long)" has been changed to "public void choosePlyIndex(CheckersPlayerEvent)".
+		
+		
+		
+CheckersGameListener
+====================
+
+General
+-------
+- New interface that provides methods to notify the listener of key CheckersEvents during a Checkers game.
+- It is used with the CheckersGameManager.
+
+
+
+CheckersGameManager
+===================
+
+General
+-------
+- Renamed from "GameManager" to "CheckersGameManager".
+- No longer directly holds a reference to a CheckersGUI, instead it has a list of listeners that it will notify at proper times of key CheckersEvents.
+- All notifications of listeners and players are now done on separate threads from the main Game Thread.
+- Error with the PlyThread not terminating has been fixed.
+
+
+
+CheckersBoard
+=============
+
+General
+-------
+- The CheckersBoard has been changed into an abstract class.
+- The implementation of this class has been moved to a subclass called "DefaultCheckersBoard".
+- Provides basic methods and constants, and declares several required abstract methods.
+- NEW: class Ply, a basic wrapper class for a ply that holds its index from the method "getPly(int)" and an array of bytes of its move indices.
+- SoftReferences are used for the invertedBoard and successors, to help prevent OutOfMemoryErrors.
+- CHANGE: pawns have been renamed checkers. Constants PLAYER1_PAWN and PLAYER2_PAWN have been changed accordingly to PLAYER1_CHECKER, PLAYER2_CHECKER.
+
+
+Methods
+-------
+- CHANGE: "public List<List<Byte>> getAllPlies()" has been changed to "public Ply getPly(int)".
+- CHANGE: "public List<CheckersBoard> getAllSuccessorBoards()" has been changed to "public CheckersBoard getSuccessor(int)".		
+- CHANGE: "public byte getSpacePos(int)" has been changed to "public byte getPiece(int)".
+- CHANGE: "public byte getSpaceRectangularPos(int, int)" has been changed to "public byte getPiece(int, int)".	
+- NEW: "public int getNumPlies()" to get the size of plies/successors.
+- NEW: "public int getNumSuccessors()" to get the size of plies/successors.
+
+
+
+DefaultCheckersBoard
+====================
+
+General
+-------
+- Uses SoftReferences to help prevent OutOfMemoryErrors.
+- Plies and successor boards are now stored as arrays.
+
+
+
+BitCheckersBoard
+================
+
+General
+-------
+- An implementation of CheckersBoard similar to the DefaultCheckersBoard, but it stores its board locations as bits, so as to save space, but it also decreases its time efficiency. 
+
+
+
+CheckersGUI
+===========
+
+General
+-------
+- Implements CheckersGameListener and methods have been changed appropriately.
+- Coupling errors with CheckersTrainer have been fixed.
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.15
+################
+
+CheckersPlayerInterface
+=======================
+
+General
+-------
+- "CheckersPlayer" was renamed to "CheckersPlayerInterface".
+
+Methods
+-------
+- CHANGE: "public int takeTurn(CheckersBoard, int)" has been changed to "public int takeTurn(CheckersBoard, int, long)".
+- NEW: "public String getDescription()" - Should return a description of the AI. It will be displayed in a word wrapped JTextArea.
+
+
+
+GameManager
+===========
+
+General
+-------
+- NEW: The maximum number of moves for a game can now be changed. There are appropriate setters and getters.
+- NEW: The ply time can now be changed. There are appropriate setters and getters.
+- Various small changes and fixes.
+
+
+
+CheckersGUI
+===========
+
+General
+-------
+- Look has been revamped.
+- A list of all plies taken has been added. And the user can select them to view the past plies.
+- Some changes in coding structure.
+- PlayerSetup dialog has been changed to display a description of the selected CheckersPlayers.
+- GameOptions menu item has been added to bring up a GameOptionsDialog to allow changing tileSize of the board, pauseTime, auto-switching, showing moves, max ply time, and max moves.
+- Trainer menu item has been added. See Trainer class.
+- Various small fixes and changes.
+
+
+
+CheckersTrainer
+===============
+
+General
+-------
+- A GUI interface that allows the user to play one CheckersPlayer against opponents of the user's choice. The GUI facilitates this selection, and it will monitor the overall game outcome statistics as well as the progress of the CheckersPalyer being trained as it plays more and more games.
+
+
+
+CheckersPlayerLoader
+====================
+
+General
+-------
+- Loading of CheckersPlayerInterfaces has been moved from "PlayerSetupDialog" to a new final and instantiatable class that has static methods that load the CheckersPlayerInterfaces.
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.11
+################
+
+General
+-------
+- Some small bugs fixed.
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.10
+################
+
+CheckersBoard
+=============
+
+General
+-------
+- Indexing has been changed so that it starts as 0 in the top left corner and increases moving to the right of the row. When it reaches the end of the row it continues on the row below. It only indexes possible locations for checkers pieces, so it ends at 32 at the bottom-right.
+- Moves are generated, which store the indexes of the squares that a moving piece visits. Read the javaDocs and notes for "getAllMoves()".
+	
+Methods
+-------
+- NEW: "public List<List<Byte>> getAllMoves()" - returns a list of bytes that represent the indices of squares that the moved piece visits.
+- NEW: IMPORTANT! "public void freeCache()" - frees the cached memory. InvertedBoards are stored for maximum efficiency, but this can leave a large chain of pointers, thus preventing explored children from being garbage collected. Call this method to free the cache, thus allowing the invertedBoard, moves list, and successors list to be garbage collected.
+- NEW: public byte getSpacePos(int) - get the pieceType using the new indexing system.
+- REMOVED: "public byte getSpaceDiagonalPos(int, int)" - Diagonal indexing no longer used.
+- REMOVED: "public String printFancy()" - use "toString()" instead.
+
+
+
+CheckersPlayer
+==============
+
+- Several new methods have been added. All of them must be implemented, but if AI's do not need to use them, they can leave the methods blank.
+
+Methods
+-------
+- NEW: "public void notifyStartGame()" - AI's can use this to reinitialise variables at the start of every game. AI's can leave this method blank if not needed.
+- NEW: "public void notifyEndGame(int)" - AI's can use this to analyse their performance at the end of the game. AI's can leave this method blank if not needed.
+- NEW: "public void notifyRemainingTime(long)" - Notifies the AI of the remaining time left for their turn. Read method javaDoc for notes on use. AI's can leave this method blank, but it is recommended to use this, if AI is in fear of running out of time.
+- NEW: "public String getName()" - Used to get the display name of the AI that will be used in the GUI. Please keep less than 30 chars.
+- CHANGE: "public int takeTurn(CheckersBoard)" to "public int takeTurn(CheckersBoard, int)"
+
+
+
+GameManager
+===========
+
+General
+-------
+- Some bugs fixed.
+- Changes made to accommodate new CheckersBoard.
+
+
+CheckersGUI
+===========
+
+General
+-------
+- NEW: All squares below pieces that can be moved are colored light green.
+- NEW: When a piece is held, the starting and ending squares of possible moves are colored light green. Intermediate squares that are visited in a chain-jump are colored cyan.
+- NEW: The starting and ending squares of the last move will be outlined in blue. If the last move was a chain-jump, the intermediate squares that are visited in the chain-jump, if any, are highlighted in magenta.
+- NEW: Tile-Coloring / showing moves, can be disabled.
+- NEW: Player Names are displayed.
+- NEW: Auto-switching of players can be enabled/disabled in the Players Setup Dialog. Auto-switching automatically switches the player's sides every game.
+- CHANGED: Player Names are used for the display instead of "Player 1" and "Player 2".
+- CHANGED: General small changes.
+
+
+-----------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
+
+
+Change Log v1.05
+################
+
+CheckersBoard
+=============
+
+Constants
+---------
+- RED_PAWN has been changed to PLAYER1_PAWN.
+- RED_KING has been changed to PLAYER1_KING.
+- BLACK_PAWN has been changed to PLAYER2_PAWN.
+- BLACK_KING has been changed to PLAYER2_KING.
+
+Methods
+-------
+- CHANGE: "public void invertBoard()" has been changed to = "public CheckersBoard invertBoard()". It no longer modifies the current board, but instead returns a new CheckersBoard that has been inverted.
+- CHANGE: "public ArrayList<CheckersBoard> getSuccessorBoards()" has been changed to "public List<CheckersBoard> getSuccessorBoards". It now returns an unmodifiable list and if there is a jump present it will only return jumps. In other words it forces single and multiple jumps.
+- NEW: A method "public boolean equals(Object)" has been added. It will return whether the passed CheckersBoard has the same board status as the current CheckersBoard object.
+
+
+
+GameManager
+===========
+
+General
+-------
+- GameManager is no longer static.
+- Multi-threading has been incorporated.
+- Time limit has been enforced for each ply.
+
+Methods
+-------
+- NEW: "public void newGame()" has been added.
+- NEW: "public void stop()" has been added.
+- NEW: "public CheckersBoard getBoard()" has been added.
+- NEW: A bunch of getters have been added.
+
+
+
+CheckersGUI
+===========
+
+General
+-------
+- GUI has been added to show and allow humans to interact for a CheckersGame.
