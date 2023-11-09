@@ -8,13 +8,14 @@ public class ChangeTheme extends JDialog implements ActionListener {
 
     private boolean accepted;
     private JSlider redSlider, greenSlider, blueSlider;
-    private JPanel colorPanel;
+    private JPanel colorPanel, previewPanel;
 
     public ChangeTheme(JFrame parent, Color colorTheme) {
         super(parent, "Change theme color", true);
 
         colorPanel = new JPanel();
         colorPanel.setLayout(new BorderLayout());
+        colorPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         redSlider = new JSlider(0, 255);
         greenSlider = new JSlider(0, 255);
@@ -29,16 +30,28 @@ public class ChangeTheme extends JDialog implements ActionListener {
         blueSlider.addChangeListener(e -> updateColor());
 
         JPanel sliderPanel = new JPanel();
-        sliderPanel.setLayout(new GridLayout(3, 2));
+        sliderPanel.setLayout(new GridLayout(3, 2, 5, 5)); // Added horizontal and vertical gap
+        sliderPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10)); // Added right padding
 
-        sliderPanel.add(new JLabel("Red:"));
+        sliderPanel.add(new JLabel(" Red:"));
         sliderPanel.add(redSlider);
-        sliderPanel.add(new JLabel("Green:"));
+        sliderPanel.add(new JLabel(" Green:"));
         sliderPanel.add(greenSlider);
-        sliderPanel.add(new JLabel("Blue:"));
+        sliderPanel.add(new JLabel(" Blue:"));
         sliderPanel.add(blueSlider);
 
         colorPanel.add(sliderPanel, BorderLayout.CENTER);
+
+        previewPanel = new JPanel();
+        previewPanel.setPreferredSize(new Dimension(50, 50));
+        previewPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0)); // Added left padding
+        previewPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+
+        JPanel previewContainer = new JPanel(new BorderLayout());
+        previewContainer.add(previewPanel, BorderLayout.CENTER);
+        previewContainer.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10)); // Added right padding
+
+        colorPanel.add(previewContainer, BorderLayout.EAST);
 
         JPanel buttonPanel = new JPanel();
         JButton okButton = new JButton("OK");
@@ -61,7 +74,8 @@ public class ChangeTheme extends JDialog implements ActionListener {
         int red = redSlider.getValue();
         int green = greenSlider.getValue();
         int blue = blueSlider.getValue();
-        colorPanel.setBackground(new Color(red, green, blue));
+        Color selectedColor = new Color(red, green, blue);
+        previewPanel.setBackground(selectedColor);
     }
 
     @Override

@@ -506,7 +506,7 @@ public class CheckersGUI extends JFrame implements MouseListener,
 			OLD_MOVE_ENDS_COLOR = Color.BLUE,
 			OLD_JUMP_INTERMEDIATE_COLOR = Color.MAGENTA,
 
-			PLAYER1_COLOR = Color.RED,
+			PLAYER1_COLOR = Color.BLACK,
 			PLAYER2_COLOR = Color.WHITE,
 
 			PLAYER1_ALPHA_COLOR = new Color(PLAYER1_COLOR.getRed(),
@@ -518,7 +518,7 @@ public class CheckersGUI extends JFrame implements MouseListener,
 			.createLineBorder(NEUTRAL_FG_COLOR, 2);
 	public static final String PAUSED_TEXT = "PAUSED";
 	public static final long SLEEP_TIME = 250;
-	public static final String VERISON = "1.26";
+	public static final String VERISON = "1.27";
 
 	static {
 		HELP_TEXT = loadTextFile(new File(HELP_FILE_PATH));
