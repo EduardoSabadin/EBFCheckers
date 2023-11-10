@@ -1,177 +1,104 @@
 package checkersGUI;
 
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
-import javax.swing.WindowConstants;
-import javax.swing.border.TitledBorder;
-
-import utilsGUI.Constants;
-
-public class ChangeTheme extends JDialog implements ActionListener,
-        KeyListener, ItemListener {
-
-    public static final Font FONT = new Font(Constants.FONT_ARIAL, Font.BOLD, 20);
+public class ChangeTheme extends JDialog implements ActionListener {
 
     private boolean accepted;
-    private SimpleComboBox comboBox1;
-    private JComponent component1;
-    private JButton ok, cancel;
-    private JPanel panel;
+    private JSlider redSlider, greenSlider, blueSlider;
+    private JPanel colorPanel, previewPanel;
 
-    // Cores disponíveis
-    public Color colorTheme;
-    private String[] colorsPt = { "Vermelho", "Preto", "Azul", "Verde", "Roxo", "Pink" };
-    private Color[] colorsEg = { Color.RED, Color.BLACK, Color.BLUE, Color.GREEN, Color.MAGENTA, Color.PINK };
-
-    public ChangeTheme(JFrame parent, Color colorsTheme) {
+    public ChangeTheme(JFrame parent, Color colorTheme) {
         super(parent, "Change theme color", true);
 
-        this.colorTheme = colorsTheme;
+        colorPanel = new JPanel();
+        colorPanel.setLayout(new BorderLayout());
+        colorPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        panel = new JPanel();
-        panel.setLayout(new GridBagLayout());
-        panel.setBackground(CheckersGUI.NEUTRAL_BG_COLOR);
+        redSlider = new JSlider(0, 255);
+        greenSlider = new JSlider(0, 255);
+        blueSlider = new JSlider(0, 255);
 
-        ListCellRenderer<? super String> cellRenderer = new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list,
-                    Object value, int index, boolean isSelected,
-                    boolean cellHasFocus) {
+        redSlider.setValue(colorTheme.getRed());
+        greenSlider.setValue(colorTheme.getGreen());
+        blueSlider.setValue(colorTheme.getBlue());
 
-                JComponent c = (JComponent) super.getListCellRendererComponent(
-                        list, value, index, isSelected, false);
+        redSlider.addChangeListener(e -> updateColor());
+        greenSlider.addChangeListener(e -> updateColor());
+        blueSlider.addChangeListener(e -> updateColor());
 
-                if (isSelected) {
-                    c.setForeground(CheckersGUI.NEUTRAL_BG_COLOR);
-                    c.setBackground(list.getForeground());
-                }
+        JPanel sliderPanel = new JPanel();
+        sliderPanel.setLayout(new GridLayout(3, 2, 5, 5)); // Added horizontal and vertical gap
+        sliderPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10)); // Added right padding
 
-                return c;
-            }
-        };
+        sliderPanel.add(new JLabel(" Red:"));
+        sliderPanel.add(redSlider);
+        sliderPanel.add(new JLabel(" Green:"));
+        sliderPanel.add(greenSlider);
+        sliderPanel.add(new JLabel(" Blue:"));
+        sliderPanel.add(blueSlider);
 
-        component1 = new JComponent() {
-        };
+        colorPanel.add(sliderPanel, BorderLayout.CENTER);
 
-        component1.setLayout(new GridBagLayout());
+        previewPanel = new JPanel();
+        previewPanel.setPreferredSize(new Dimension(50, 50));
+        previewPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0)); // Added left padding
+        previewPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 
-        TitledBorder border = BorderFactory.createTitledBorder(
-                CheckersGUI.BORDER, "Theme color");
-        border.setTitleFont(FONT);
-        border.setTitleColor(CheckersGUI.PLAYER1_COLOR);
-        component1.setBorder(border);
+        JPanel previewContainer = new JPanel(new BorderLayout());
+        previewContainer.add(previewPanel, BorderLayout.CENTER);
+        previewContainer.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10)); // Added right padding
 
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.gridx = 0;
-        c.gridy = 0;
+        colorPanel.add(previewContainer, BorderLayout.EAST);
 
-        // ComboBox para selecionar a cor do Tema
-        comboBox1 = new SimpleComboBox(colorsPt);
-        comboBox1.setSelectedIndex(0); // Selecionar a cor padrão
-        comboBox1.setSelectedValue("");
-        comboBox1.addItemListener(this);
-        comboBox1.setBackground(Color.white);
-        comboBox1.setFocusBackground(Color.gray);
-        comboBox1.setForeground(Color.gray);
-        comboBox1.getList().setCellRenderer(cellRenderer);
-        comboBox1.getPopup().setBorder(CheckersGUI.BORDER);
-        component1.add(comboBox1, c);
+        JPanel buttonPanel = new JPanel();
+        JButton okButton = new JButton("OK");
+        okButton.addActionListener(this);
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(this);
+        buttonPanel.add(okButton);
+        buttonPanel.add(cancelButton);
 
-        c.gridy++;
+        add(colorPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
 
-        c.insets = new Insets(5, 5, 5, 5);
-        c.weightx = 1;
-        c.weighty = 0;
-        c.gridx = 0;
-        c.gridy = 0;
-        panel.add(component1, c);
-
-        c.gridwidth = 1;
-        c.weighty = 0;
-        c.gridy++;
-        ok = new JButton("OK");
-        ok.addActionListener(this);
-        panel.add(ok, c);
-
-        c.gridx--;
-        cancel = new JButton("Cancel");
-        cancel.addActionListener(this);
-        panel.add(cancel, c);
-
-        add(panel);
-        setFocusCycleRoot(true);
-
-        comboBox1.addKeyListener(this);
-        cancel.addKeyListener(this);
-        ok.addKeyListener(this);
-        addKeyListener(this);
-
-        setMinimumSize(new Dimension(400, 300));
-        setSize(600, 400);
+        setMinimumSize(new Dimension(400, 200));
         setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
+    private void updateColor() {
+        int red = redSlider.getValue();
+        int green = greenSlider.getValue();
+        int blue = blueSlider.getValue();
+        Color selectedColor = new Color(red, green, blue);
+        previewPanel.setBackground(selectedColor);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        if (e.getSource() == ok)
+        if (e.getActionCommand().equals("OK")) {
             accepted = true;
+        } else if (e.getActionCommand().equals("Cancel")) {
+            accepted = false;
+        }
         setVisible(false);
     }
 
     public Color getColorTheme() {
-        return colorTheme;
+        if (accepted) {
+            int red = redSlider.getValue();
+            int green = greenSlider.getValue();
+            int blue = blueSlider.getValue();
+            return new Color(red, green, blue);
+        }
+        return null;
     }
 
     public boolean isAccepted() {
         return accepted;
     }
-
-    @Override
-    public void itemStateChanged(ItemEvent e) {
-        try {
-            int index = comboBox1.getSelectedIndex();
-            this.colorTheme = colorsEg[index];
-        } catch (Exception error) {
-            JOptionPane.showMessageDialog(this, error, "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
-            error.printStackTrace();
-        }
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-            cancel.doClick();
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
 }
