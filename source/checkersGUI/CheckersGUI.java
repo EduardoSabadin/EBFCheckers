@@ -999,10 +999,7 @@ public class CheckersGUI extends JFrame implements MouseListener,
 		AbstractAction action = new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				boolean paused = gameManager.isPaused();
-//				if (paused) gameManager.setPaused(false);
-//				else gameManager.setPaused(true);
-//				repaint();
+				pauseHandler();
 				listener.actionPerformed(e);
 			}
 		};
@@ -1011,6 +1008,16 @@ public class CheckersGUI extends JFrame implements MouseListener,
 		action.putValue(Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(acceleratorKey, 0));
 
 		return action;
+	}
+
+	private void pauseHandler() {
+		boolean paused = gameManager.isPaused();
+		if (!paused) gameManager.setPaused(true);
+		else gameManager.setPaused(false);
+		repaint();
+	}
+
+	private void handlePause(ActionEvent e) {
 	}
 
 	private void handleNewGame(ActionEvent e) {
@@ -1027,26 +1034,6 @@ public class CheckersGUI extends JFrame implements MouseListener,
 		showingOldPly = false;
 	}
 
-	private void handlePause(ActionEvent e) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-		resumeGame(paused);
-	}
-
-	private void pauseGame(boolean paused) {
-		if (!paused) {
-			gameManager.setPaused(true);
-		}
-		repaint();
-	}
-
-	private void resumeGame(boolean paused) {
-		if (paused) {
-			gameManager.setPaused(false);
-		}
-		repaint();
-	}
-
 	private void handleQuit(ActionEvent actionEvent) {
 		gameManager.removeCheckersGameListener(CheckersGUI.this);
 		if (trainer == null) {
@@ -1058,9 +1045,6 @@ public class CheckersGUI extends JFrame implements MouseListener,
 	}
 
 	private void handlePlayerSetup(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		CheckersPlayerInterface player1 = gameManager.getPlayer1();
 		CheckersPlayerInterface player2 = gameManager.getPlayer2();
 
@@ -1079,28 +1063,18 @@ public class CheckersGUI extends JFrame implements MouseListener,
 			switchPlayers = false;
 		}
 		dialog.dispose();
-
-		resumeGame(paused);
 	}
 
 	private void handleChangePlayersNickName(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		CheckersPlayerInterface player1 = gameManager.getPlayer1();
 		CheckersPlayerInterface player2 = gameManager.getPlayer2();
 
 		ChangePlayerNameDialog dialog = new ChangePlayerNameDialog(CheckersGUI.this, player1, player2);
 		updatePlayerLabels();
 		dialog.dispose();
-
-		resumeGame(paused);
 	}
 
 	private void handleChangeTheme(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		ChangeTheme dialog = new ChangeTheme(CheckersGUI.this, board.selectedColor);
 		if (dialog.isAccepted()) {
 			board.selectedColor = dialog.getColorTheme();
@@ -1111,8 +1085,6 @@ public class CheckersGUI extends JFrame implements MouseListener,
 		}
 
 		dialog.dispose();
-
-		resumeGame(paused);
 	}
 
 
@@ -1133,9 +1105,6 @@ public class CheckersGUI extends JFrame implements MouseListener,
 	}
 
 	private void handleGameOptions(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		GameOptionsDialog dialog = new GameOptionsDialog(
 				CheckersGUI.this,
 				gameManager.getPlyTime() / 1000,
@@ -1153,54 +1122,27 @@ public class CheckersGUI extends JFrame implements MouseListener,
 		}
 
 		dialog.dispose();
-
-		resumeGame(paused);
 	}
 
 	private void handleCreateTrainer(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		setTrainer(new CheckersTrainer(gameManager));
 		trainer.setGUI(CheckersGUI.this);
-
-		resumeGame(paused);
 	}
 
 	private void handleHelp(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		new TextDialog(CheckersGUI.this, getTitle() + " Help", HELP_TEXT, true);
-
-		resumeGame(paused);
 	}
 
 	private void handleChangeLog(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		new TextDialog(CheckersGUI.this, getTitle() + " Change Log", CHANGE_LOG_TEXT, true);
-
-		resumeGame(paused);
 	}
 
 	private void handleLicense(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		new TextDialog(CheckersGUI.this, "GNU General Public License", LICENSE_TEXT, false);
-
-		resumeGame(paused);
 	}
 
 	private void handleAbout(ActionEvent actionEvent) {
-		boolean paused = gameManager.isPaused();
-		pauseGame(paused);
-
 		new TextDialog(CheckersGUI.this, getTitle() + " About", ABOUT_TEXT, true);
-
-		resumeGame(paused);
 	}
 
 	private void initMenu() {
