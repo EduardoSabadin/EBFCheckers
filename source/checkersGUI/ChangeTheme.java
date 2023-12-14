@@ -46,6 +46,8 @@ public class ChangeTheme extends JDialog implements ActionListener {
         previewPanel.setPreferredSize(new Dimension(50, 50));
         previewPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0)); // Added left padding
         previewPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        Color Default = new Color(redSlider.getValue(), greenSlider.getValue(), blueSlider.getValue());
+        previewPanel.setBackground(Default);
 
         JPanel previewContainer = new JPanel(new BorderLayout());
         previewContainer.add(previewPanel, BorderLayout.CENTER);
